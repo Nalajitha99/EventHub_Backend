@@ -17,11 +17,22 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public UserServiceImpl(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Override
     public UserDto saveUser(UserDto userDto){
         userRepository.save(modelMapper.map(userDto, User.class));
         return userDto;
+    }
+
+    @Override
+    public UserDto getUserById(String userId){
+        User user = userRepository.getUserByUserId(userId);
+        return modelMapper.map(user, UserDto.class);
     }
 }
