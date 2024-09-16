@@ -1,12 +1,16 @@
+package com.example.EventHub.Security;
+
 import com.example.EventHub.Services.ServiceImplementations.UserServiceImpl;
 import com.example.EventHub.Security.jwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,36 +19,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)  // Enable method-level security if needed
 public class SecurityConfig {
 
-    private final jwtRequestFilter jwtRequestFilter;
-    private final UserServiceImpl userService;
-
     @Autowired
-    public SecurityConfig(jwtRequestFilter jwtRequestFilter, UserServiceImpl userService) {
-        this.jwtRequestFilter = jwtRequestFilter;
-        this.userService = userService;
+    private jwtRequestFilter jwtRequestFilter;
+
+    public SecurityConfig() {
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests() // updated from authorizeRequests()
-                .requestMatchers("/authenticate", "/signup").permitAll()
-                .requestMatchers("/admin").hasRole("ADMIN")
-                .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+        http.csrf((csrf) -> {
+            csrf.disable();
+        }).authorizeHttpRequests((auth) -> {
+            ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)auth.requestMatchers(new String[]{"/authenticate", "api/v1/user/saveUser"})).permitAll().requestMatchers(new String[]{"/admin"})).hasRole("ADMIN").requestMatchers(new String[]{"/user"})).hasAnyRole(new String[]{"USER", "ADMIN"}).anyRequest()).authenticated();
+        }).sessionManagement((session) -> {
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        });
+        http.addFilterBefore(this.jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        return (SecurityFilterChain)http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

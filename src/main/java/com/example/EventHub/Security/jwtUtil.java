@@ -1,47 +1,55 @@
 package com.example.EventHub.Security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
+@Component
 public class jwtUtil {
 
-    private String SECRET_KEY = "secret";
+    @Value("${app.jwt-secret}")
+    private String jwtSecret;
+    @Value("${app.jwt-expiration-in-ms}")
+    private int jwtExpirationInMs;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public jwtUtil() {
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    private Key getSigningKey() {
+        byte[] keyBytes = (byte[])Decoders.BASE64.decode(this.jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    public String generateToken(Authentication authentication) {
+        return this.generateToken(authentication.getName(), this.jwtExpirationInMs);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+    private String generateToken(String subject, int expirationTime) {
+        Date currentDate = new Date();
+        Date expiryDate = new Date(currentDate.getTime() + (long)expirationTime);
+        Key key = this.getSigningKey();
+        return ((JwtBuilder)((JwtBuilder)((JwtBuilder)Jwts.builder().setSubject(subject)).setIssuedAt(currentDate)).setExpiration(expiryDate)).signWith(key, SignatureAlgorithm.HS512).compact();
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+    public String getUsernameFromToken(String token) {
+        Claims claims = (Claims)Jwts.parser().setSigningKey(this.getSigningKey()).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()));
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(this.getSigningKey()).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception var3) {
+            throw new RuntimeException("Expired or invalid JWT token");
+        }
     }
 }

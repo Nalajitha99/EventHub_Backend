@@ -1,19 +1,20 @@
 package com.example.EventHub.Services.ServiceImplementations;
 
+import com.example.EventHub.Models.AuthRequest;
 import com.example.EventHub.Models.Domains.User;
 import com.example.EventHub.Models.Dtos.UserDto;
 import com.example.EventHub.Repositories.UserRepository;
+import com.example.EventHub.Security.jwtUtil;
 import com.example.EventHub.Services.ServiceInterfaces.IUserService;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,40 +22,50 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
-
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private jwtUtil jwtutil;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @Override
-    public UserDto saveUser(UserDto userDto){
-        userRepository.save(modelMapper.map(userDto, User.class));
+    public UserServiceImpl() {
+    }
+
+    public UserDto saveUser(UserDto userDto) {
+        this.userRepository.save((User)this.modelMapper.map(userDto, User.class));
         return userDto;
     }
 
-    @Override
-    public UserDto getUserById(String userId){
-        User user = userRepository.getUserByUserId(userId);
-        return modelMapper.map(user, UserDto.class);
+    public UserDto getUserById(String userId) {
+        User user = this.userRepository.getUserByUserId(userId);
+        return (UserDto)this.modelMapper.map(user, UserDto.class);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
+    public boolean UserExist(String username) {
+        return this.userRepository.findByUsername(username).isPresent();
+    }
 
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
+    public ResponseEntity<Object> createAuthenticationToken(AuthRequest authRequest) throws Exception {
+        try {
+            if (this.UserExist(authRequest.getUsername())) {
+                User user = this.userRepository.findByUsername2(authRequest.getUsername());
+                if (user != null && this.passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), (Object)null, new ArrayList());
+                    String token = this.jwtutil.generateToken(authentication);
+                    authRequest.setToken(token);
+                    authRequest.setMessage("Login Successful");
+                } else {
+                    authRequest.setMessage("Invalid Password");
+                }
+            } else {
+                authRequest.setMessage("User does not exist");
+            }
+
+            return ResponseEntity.ok(authRequest);
+        } catch (Exception var5) {
+            Exception e = var5;
+            throw new Exception("Error not log in", e);
         }
-
-        User u = user.get();
-        return new org.springframework.security.core.userdetails.User(
-                u.getUsername(),
-                u.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + u.getRole().name()))  // Assign roles
-        );
     }
 }
