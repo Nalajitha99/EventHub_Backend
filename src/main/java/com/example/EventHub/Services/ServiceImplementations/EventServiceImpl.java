@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class EventServiceImpl implements IEventService {
 
@@ -28,5 +31,13 @@ public class EventServiceImpl implements IEventService {
     public EventDto getEventByID(String eventId){
         Event event = eventRepository.getEventByEventID(eventId);
         return modelMapper.map(event, EventDto.class);
+    }
+
+    @Override
+    public List<EventDto> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        return events.stream()
+                .map(event -> modelMapper.map(event, EventDto.class))
+                .collect(Collectors.toList());
     }
 }

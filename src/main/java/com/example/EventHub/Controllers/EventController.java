@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/v1/event")
 public class EventController {
@@ -30,5 +32,11 @@ public class EventController {
     @GetMapping("getEventByID/{eventId}")
     public EventDto getEventByID(@PathVariable String userId){
         return eventService.getEventByID(userId);
+    }
+
+    @GetMapping("/getAllEvents")
+    public ResponseEntity<List<EventDto>> getAllEvents() {
+        List<EventDto> events = eventService.getAllEvents();
+        return ResponseEntity.ok(events);
     }
 }
