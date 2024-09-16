@@ -22,4 +22,9 @@ public class EventServiceImpl implements IEventService {
         Event e = eventRepository.save(event);
         return modelMapper.map(e, EventDto.class);
     }
+
+    public EventDto getEventById(String eventId){
+        Event event = eventRepository.getEventByEventID(eventId);
+        return modelMapper.map(event, EventDto.class);
+    }
 }

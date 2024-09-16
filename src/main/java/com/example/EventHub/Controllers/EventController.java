@@ -4,13 +4,10 @@ import com.example.EventHub.Models.Dtos.EventDto;
 import com.example.EventHub.Services.ServiceInterfaces.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/event")
+@RequestMapping(value = "api/v1/event")
 public class EventController {
 
     @Autowired
@@ -28,5 +25,10 @@ public class EventController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("getEventByID/{eventId}")
+    public EventDto getUserByID(@PathVariable String userId){
+        return eventService.getEventByID(userId);
     }
 }
