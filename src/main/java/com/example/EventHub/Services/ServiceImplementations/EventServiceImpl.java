@@ -17,13 +17,15 @@ public class EventServiceImpl implements IEventService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Override
     public EventDto saveEvent(EventDto eventDto){
         Event event = modelMapper.map(eventDto, Event.class);
         Event e = eventRepository.save(event);
         return modelMapper.map(e, EventDto.class);
     }
 
-    public EventDto getEventById(String eventId){
+    @Override
+    public EventDto getEventByID(String eventId){
         Event event = eventRepository.getEventByEventID(eventId);
         return modelMapper.map(event, EventDto.class);
     }

@@ -28,7 +28,7 @@ public class EventController {
     }
 
     @GetMapping("getEventByID/{eventId}")
-    public EventDto getUserByID(@PathVariable String userId){
+    public EventDto getEventByID(@PathVariable String userId){
         return eventService.getEventByID(userId);
     }
 }
