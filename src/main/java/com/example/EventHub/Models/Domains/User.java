@@ -27,7 +27,7 @@ public class User {
     private String email;
     private String username;
 
-    @Setter(AccessLevel.NONE)  // Prevent direct modification of password
+    @Setter(AccessLevel.NONE)
     private String password;
 
     private String contactNo;
@@ -35,7 +35,7 @@ public class User {
     private String gender;
 
     public void setPassword(String rawPassword) {
-        this.password = new BCryptPasswordEncoder().encode(rawPassword);  // Encrypt password
+        this.password = new BCryptPasswordEncoder().encode(rawPassword);
     }
 
     public String getUsername() {

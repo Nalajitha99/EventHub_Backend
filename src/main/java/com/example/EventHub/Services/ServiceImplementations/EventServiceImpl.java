@@ -1,9 +1,12 @@
 package com.example.EventHub.Services.ServiceImplementations;
 
 import com.example.EventHub.Models.Domains.Event;
+import com.example.EventHub.Models.Domains.User;
 import com.example.EventHub.Models.Dtos.EventDto;
+import com.example.EventHub.Models.Dtos.UserDto;
 import com.example.EventHub.Repositories.EventRepository;
 import com.example.EventHub.Services.ServiceInterfaces.IEventService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class EventServiceImpl implements IEventService {
 
     @Autowired
@@ -20,17 +24,21 @@ public class EventServiceImpl implements IEventService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public EventDto saveEvent(EventDto eventDto){
-        Event event = modelMapper.map(eventDto, Event.class);
-        Event e = eventRepository.save(event);
-        return modelMapper.map(e, EventDto.class);
+//    @Override
+//    public EventDto saveEvent(EventDto eventDto){
+//        Event event = modelMapper.map(eventDto, Event.class);
+//        Event e = eventRepository.save(event);
+//        return modelMapper.map(e, EventDto.class);
+//    }
+
+    public EventDto saveEvent(EventDto eventDto) {
+        this.eventRepository.save((Event)this.modelMapper.map(eventDto, Event.class));
+        return eventDto;
     }
 
-    @Override
     public EventDto getEventByID(String eventId){
-        Event event = eventRepository.getEventByEventID(eventId);
-        return modelMapper.map(event, EventDto.class);
+        Event event = this.eventRepository.getEventByEventID(eventId);
+        return (EventDto)this.modelMapper.map(event, EventDto.class);
     }
 
     @Override
