@@ -6,9 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
+
 public interface IUserService {
     UserDto saveUser(UserDto userDto);
     UserDto getUserById(String userId);
+    List<UserDto> getAllUsers();
 
     ResponseEntity<Object> createAuthenticationToken(AuthRequest authRequest) throws Exception;
 }

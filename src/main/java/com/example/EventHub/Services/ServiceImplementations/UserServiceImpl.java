@@ -8,6 +8,9 @@ import com.example.EventHub.Security.jwtUtil;
 import com.example.EventHub.Services.ServiceInterfaces.IUserService;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +43,13 @@ public class UserServiceImpl implements IUserService {
     public UserDto getUserById(String userId) {
         User user = this.userRepository.getUserByUserId(userId);
         return (UserDto)this.modelMapper.map(user, UserDto.class);
+    }
+
+    public List<UserDto> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
     }
 
     public boolean UserExist(String username) {
