@@ -11,6 +11,7 @@ import java.util.Date;
 @Setter
 @Builder
 public class EventDto {
+    private long eventId;
     private String title;
     private String description;
     private String category;

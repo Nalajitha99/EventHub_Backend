@@ -12,6 +12,7 @@ public interface IUserService {
     UserDto saveUser(UserDto userDto);
     UserDto getUserById(String userId);
     List<UserDto> getAllUsers();
+    UserDto updateUser(String userId, UserDto userDto);
 
     ResponseEntity<Object> createAuthenticationToken(AuthRequest authRequest) throws Exception;
 }

@@ -8,9 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder
+@Data
 public class User {
 
     @Id
@@ -49,5 +47,7 @@ public class User {
     public Role getRole() {
         return role;
     }
+
+
 }
 

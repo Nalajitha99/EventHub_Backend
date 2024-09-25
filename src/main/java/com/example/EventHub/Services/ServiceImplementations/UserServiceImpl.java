@@ -52,6 +52,11 @@ public class UserServiceImpl implements IUserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public UserDto updateUser(String userId, UserDto userDto) {
+        return null;
+    }
+
     public boolean UserExist(String username) {
         return this.userRepository.findByUsername(username).isPresent();
     }

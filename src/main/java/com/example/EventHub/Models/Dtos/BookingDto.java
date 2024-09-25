@@ -12,6 +12,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class BookingDto {
+    private long bookingId;
     private long customerId;
     private long eventId;
     private int totalTickets;

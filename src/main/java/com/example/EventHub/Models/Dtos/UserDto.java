@@ -1,16 +1,16 @@
 package com.example.EventHub.Models.Dtos;
 
+import com.example.EventHub.Models.Domains.Role;
 import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder
+@Data
 public class UserDto {
+    private long customerId;
     private String firstName;
     private String lastName;
-    private String role;
+    private Role role;
     private String nic;
     private String email;
     private String username;

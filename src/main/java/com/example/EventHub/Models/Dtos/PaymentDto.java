@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PaymentDto {
+    private long paymentId;
     private long eventId;
     private int totalTicket;
     private double totalPrice;
