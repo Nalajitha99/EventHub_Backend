@@ -39,4 +39,14 @@ public class EventController {
         List<EventDto> events = eventService.getAllEvents();
         return ResponseEntity.ok(events);
     }
+
+    @DeleteMapping("/deleteEvent/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable("id") long eventId) {
+        try {
+            eventService.deleteEventById(eventId);
+            return ResponseEntity.ok("Event deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
 }

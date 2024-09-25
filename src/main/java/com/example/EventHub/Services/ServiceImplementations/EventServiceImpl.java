@@ -48,4 +48,13 @@ public class EventServiceImpl implements IEventService {
                 .map(event -> modelMapper.map(event, EventDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteEventById(long eventId) {
+        if (eventRepository.existsById(eventId)) {
+            eventRepository.deleteById(eventId);
+        } else {
+            throw new IllegalArgumentException("Event with ID " + eventId + " not found");
+        }
+    }
 }
