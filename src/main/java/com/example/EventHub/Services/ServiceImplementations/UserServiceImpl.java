@@ -57,6 +57,15 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
 
+    @Override
+    public void deleteUserById(long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new IllegalArgumentException("User with ID " + userId + " not found");
+        }
+    }
+
     public boolean UserExist(String username) {
         return this.userRepository.findByUsername(username).isPresent();
     }

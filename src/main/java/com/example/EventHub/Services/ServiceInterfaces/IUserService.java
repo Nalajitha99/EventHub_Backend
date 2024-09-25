@@ -13,6 +13,7 @@ public interface IUserService {
     UserDto getUserById(String userId);
     List<UserDto> getAllUsers();
     UserDto updateUser(String userId, UserDto userDto);
+    void deleteUserById(long userId);
 
     ResponseEntity<Object> createAuthenticationToken(AuthRequest authRequest) throws Exception;
 }
