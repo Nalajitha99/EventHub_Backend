@@ -2,12 +2,16 @@ package com.example.EventHub.Controllers;
 
 import com.example.EventHub.Models.Dtos.EventDto;
 import com.example.EventHub.Services.ServiceInterfaces.IEventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(value = "api/v1/event")
 public class EventController {
@@ -21,12 +25,16 @@ public class EventController {
     }
 
     @PostMapping("/saveEvent")
-    public ResponseEntity<?> saveEvent(@RequestBody EventDto eventDto){
-        try{
-            return ResponseEntity.ok(eventService.saveEvent(eventDto));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<EventDto> saveEvent(@RequestParam("event") String eventJson,
+                                                @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        EventDto eventDto = objectMapper.readValue(eventJson, EventDto.class);
+
+        if (image != null) {
+            eventDto.setImageData(image.getBytes()); // Convert image to byte array
         }
+
+        return ResponseEntity.ok(eventService.saveEvent(eventDto));
     }
 
     @GetMapping("getEventByID/{eventId}")

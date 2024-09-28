@@ -22,4 +22,9 @@ public class EventDto {
     private double ticketPrice;
     private Date date;
     private LocalTime startTime;
+    private byte[] imageData;
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
 }
