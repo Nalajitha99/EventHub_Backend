@@ -4,11 +4,14 @@ import com.example.EventHub.Models.Dtos.EventDto;
 import com.example.EventHub.Services.ServiceInterfaces.IEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,14 +28,33 @@ public class EventController {
     }
 
     @PostMapping("/saveEvent")
-    public ResponseEntity<EventDto> saveEvent(@RequestParam("event") String eventJson,
-                                                @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        EventDto eventDto = objectMapper.readValue(eventJson, EventDto.class);
+    public ResponseEntity<EventDto> saveEvent(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("category") String category,
+            @RequestParam("venue") String venue,
+            @RequestParam("venueType") String venueType,
+            @RequestParam("location") String location,
+            @RequestParam("noOfTickets") long noOfTickets,
+            @RequestParam("ticketPrice") double ticketPrice,
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+            @RequestParam("startTime") LocalTime startTime,
+            @RequestParam("endTime") LocalTime endTime,
+            @RequestParam("imageData") MultipartFile imageData) throws IOException {
 
-        if (image != null) {
-            eventDto.setImageData(image.getBytes()); // Convert image to byte array
-        }
+        EventDto eventDto = new EventDto();
+        eventDto.setTitle(title);
+        eventDto.setDescription(description);
+        eventDto.setCategory(category);
+        eventDto.setVenue(venue);
+        eventDto.setVenueType(venueType);
+        eventDto.setLocation(location);
+        eventDto.setNoOfTickets(noOfTickets);
+        eventDto.setTicketPrice(ticketPrice);
+        eventDto.setDate(date);
+        eventDto.setStartTime(startTime);
+        eventDto.setEndTime(endTime);
+        eventDto.setImageData(imageData.getBytes()); // Save the image data as byte array
 
         return ResponseEntity.ok(eventService.saveEvent(eventDto));
     }

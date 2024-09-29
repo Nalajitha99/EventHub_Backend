@@ -21,11 +21,13 @@ public class Event {
     private String category;
     private String venue;
     private String venueType;
-    private String Location;
+    private String location;
     private long noOfTickets;
     private double ticketPrice;
     private Date date;
     private LocalTime startTime;
+    private LocalTime endTime;
     @Lob
+    @Column(name = "image_data", columnDefinition = "MEDIUMBLOB") // Specify type
     private byte[] imageData;
 }

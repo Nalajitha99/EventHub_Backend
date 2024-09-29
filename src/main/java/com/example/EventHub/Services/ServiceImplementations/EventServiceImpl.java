@@ -32,7 +32,8 @@ public class EventServiceImpl implements IEventService {
 //    }
 
     public EventDto saveEvent(EventDto eventDto) {
-        this.eventRepository.save((Event)this.modelMapper.map(eventDto, Event.class));
+        Event event = modelMapper.map(eventDto, Event.class);
+        eventRepository.save(event);
         return eventDto;
     }
 
