@@ -60,9 +60,19 @@ public class EventController {
     }
 
     @GetMapping("getEventByID/{eventId}")
-    public EventDto getEventByID(@PathVariable String eventId){
-        return eventService.getEventByID(eventId);
+    public ResponseEntity<EventDto> getEventByID(@PathVariable String eventId) {
+        try {
+            EventDto eventDto = eventService.getEventByID(eventId);
+            if (eventDto != null) {
+                return ResponseEntity.ok(eventDto);
+            } else {
+                return ResponseEntity.status(404).body(null);
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(null);
+        }
     }
+
 
     @GetMapping("/getAllEvents")
     public ResponseEntity<List<EventDto>> getAllEvents() {
