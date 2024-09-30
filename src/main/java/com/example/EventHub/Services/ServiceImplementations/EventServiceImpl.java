@@ -50,6 +50,10 @@ public class EventServiceImpl implements IEventService {
                 .collect(Collectors.toList());
     }
 
+    public List<Event> getEventsByVenue(String venue) {
+        return eventRepository.findByVenue(venue);
+    }
+
     @Override
     public void deleteEventById(long eventId) {
         if (eventRepository.existsById(eventId)) {

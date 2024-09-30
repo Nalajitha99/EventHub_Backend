@@ -1,5 +1,6 @@
 package com.example.EventHub.Controllers;
 
+import com.example.EventHub.Models.Domains.Event;
 import com.example.EventHub.Models.Dtos.EventDto;
 import com.example.EventHub.Services.ServiceInterfaces.IEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,6 +72,11 @@ public class EventController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(400).body(null);
         }
+    }
+
+    @GetMapping("/venue/{venue}")
+    public List<Event> getEventsByVenue(@PathVariable String venue) {
+        return eventService.getEventsByVenue(venue);
     }
 
 
