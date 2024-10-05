@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @AllArgsConstructor
@@ -32,6 +34,10 @@ public class User {
     private String address;
     private String gender;
 
+    private boolean verified = false;
+    private int otp;
+    private LocalDateTime createdDate = LocalDateTime.now();
+
     public void setPassword(String rawPassword) {
         this.password = new BCryptPasswordEncoder().encode(rawPassword);
     }
@@ -48,6 +54,17 @@ public class User {
         return role;
     }
 
+    public void setOtp(int otp) {
+        this.otp = otp;
+    }
 
+    public int getOtp() {
+        return otp;
+    }
+
+
+    public boolean isVerified() {
+        return true;
+    }
 }
 

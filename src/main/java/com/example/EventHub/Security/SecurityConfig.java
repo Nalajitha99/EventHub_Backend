@@ -35,9 +35,10 @@ public class SecurityConfig {
         http.cors().and()  // Enable CORS configuration
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/authenticate", "/api/v1/user/saveUser").permitAll() // Allow specific endpoints
-                            .requestMatchers("/admin").hasRole("ADMIN")
-                            .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
+                    auth.requestMatchers("/authenticate", "/api/v1/user/saveUser","/api/v1/user/verifyEmail").permitAll() // Allow specific endpoints
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/user/**").hasRole("USER")
+                            .requestMatchers("/Common/**").hasAnyRole("ADMIN", "USER")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

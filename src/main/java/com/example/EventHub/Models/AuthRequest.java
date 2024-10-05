@@ -6,6 +6,7 @@ public class AuthRequest {
     private String password;
     private String token;
     private String message;
+    private String role;
 
     public String getUsername() {
         return this.username;
@@ -21,6 +22,10 @@ public class AuthRequest {
 
     public String getMessage() {
         return this.message;
+    }
+
+    public String getRole() {
+        return this.role;
     }
 
     public void setUsername(String username) {
@@ -39,11 +44,16 @@ public class AuthRequest {
         this.token = token;
     }
 
-    public AuthRequest(String username, String password, String token, String message) {
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public AuthRequest(String username, String password, String token, String message, String role) {
         this.username = username;
         this.password = password;
         this.token = token;
         this.message = message;
+        this.role = role;
     }
 
     public AuthRequest() {
