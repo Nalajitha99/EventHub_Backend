@@ -64,7 +64,7 @@ public class User {
 
 
     public boolean isVerified() {
-        return true;
+        return false;
     }
 }
 

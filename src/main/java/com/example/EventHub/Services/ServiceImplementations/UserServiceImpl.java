@@ -75,7 +75,7 @@ public class UserServiceImpl implements IUserService {
             SimpleMailMessage message=new SimpleMailMessage();
             message.setSubject("Hello User");
             message.setTo(email);
-            message.setText("Please use this OTP to verify your email:"+" "+otp);
+            message.setText("Please use this OTP to verify your email within 5 minutes:"+" "+otp);
             message.setFrom("hubevenlk@gmail.com");
 
 
@@ -164,7 +164,7 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 300000)
     public void deleteUnverifiedUsers() {
 
         userRepository.deleteByCreatedDateBeforeAndVerifiedFalse(LocalDateTime.now().minusMinutes(1));
