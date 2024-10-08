@@ -16,7 +16,12 @@ public class EventOrganizer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long organizerId;
-    private long customerId;
-    private String organization;
+    private String organizerName;
+    private String companyName;
+    private String eventType;
+    private long ticketCount;
+    private String email;
+    private String contactNo;
+    private String message;
 
 }

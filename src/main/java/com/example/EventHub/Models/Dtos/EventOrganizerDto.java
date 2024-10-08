@@ -10,6 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EventOrganizerDto {
-    private long customerId;
-    private String organization;
+    private String organizerName;
+    private String companyName;
+    private String eventType;
+    private long ticketCount;
+    private String email;
+    private String contactNo;
+    private String message;
 }
