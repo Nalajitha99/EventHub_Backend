@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(value = "api/v1/eventOrganizer")
@@ -27,6 +29,12 @@ public class EventOrganizerController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/getAllEventRequests")
+    public ResponseEntity<List<EventOrganizerDto>> getAllUsers(){
+        List<EventOrganizerDto> eventOrganizers = eventOrganizerService.getAllEventOrganizers();
+        return ResponseEntity.ok(eventOrganizers);
     }
 
 
