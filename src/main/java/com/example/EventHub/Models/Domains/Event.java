@@ -30,4 +30,12 @@ public class Event {
     @Lob
     @Column(name = "image_data", columnDefinition = "MEDIUMBLOB") // Specify type
     private byte[] imageData;
+
+    public long getNoOfTickets() {
+        return noOfTickets;
+    }
+
+    public void setNoOfTickets(long noOfTickets) {
+        this.noOfTickets = noOfTickets;
+    }
 }

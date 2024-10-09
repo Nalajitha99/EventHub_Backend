@@ -38,6 +38,10 @@ public class EventDto {
         this.description = description;
     }
 
+    public long getNoOfTickets() {
+        return noOfTickets;
+    }
+
     public void setCategory(String category) {
         this.category = category;
     }

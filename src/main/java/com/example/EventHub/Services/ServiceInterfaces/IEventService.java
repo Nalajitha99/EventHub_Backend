@@ -11,4 +11,7 @@ public interface IEventService {
     List<EventDto> getAllEvents();
     void deleteEventById(long eventId);
     List<Event> getEventsByVenue(String venue);
+
+    void updateTickets(String eventId, long purchasedTickets);
+
 }

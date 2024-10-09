@@ -34,4 +34,9 @@ public class EventOrganizerServiceImpl implements IEventOrganizerService {
                 .map(eventOrganizer -> modelMapper.map(eventOrganizer, EventOrganizerDto.class))
                 .collect(Collectors.toList());
     }
+
+    public EventOrganizerDto getEventOrganizerById(String organizerId) {
+        EventOrganizer eventOrganizer = this.eventOrganizerRepository.getEventOrganizerById(organizerId);
+        return (EventOrganizerDto)this.modelMapper.map(eventOrganizer, EventOrganizerDto.class);
+    }
 }

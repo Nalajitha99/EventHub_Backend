@@ -17,4 +17,5 @@ public class EventOrganizerDto {
     private String email;
     private String contactNo;
     private String message;
+    private String status;
 }

@@ -23,5 +23,6 @@ public class EventOrganizer {
     private String email;
     private String contactNo;
     private String message;
+    private String status;
 
 }

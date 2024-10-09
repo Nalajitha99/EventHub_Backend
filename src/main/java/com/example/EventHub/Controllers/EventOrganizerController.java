@@ -1,7 +1,6 @@
 package com.example.EventHub.Controllers;
 
 import com.example.EventHub.Models.Dtos.EventOrganizerDto;
-import com.example.EventHub.Models.Dtos.UserDto;
 import com.example.EventHub.Services.ServiceInterfaces.IEventOrganizerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +34,11 @@ public class EventOrganizerController {
     public ResponseEntity<List<EventOrganizerDto>> getAllUsers(){
         List<EventOrganizerDto> eventOrganizers = eventOrganizerService.getAllEventOrganizers();
         return ResponseEntity.ok(eventOrganizers);
+    }
+
+    @GetMapping("/getEventOrganizerById/{organizerId}")
+    public EventOrganizerDto getEventOrganizerById(@PathVariable String organizerId){
+        return eventOrganizerService.getEventOrganizerById(organizerId);
     }
 
 

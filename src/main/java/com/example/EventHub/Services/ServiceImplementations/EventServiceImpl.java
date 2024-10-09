@@ -1,9 +1,7 @@
 package com.example.EventHub.Services.ServiceImplementations;
 
 import com.example.EventHub.Models.Domains.Event;
-import com.example.EventHub.Models.Domains.User;
 import com.example.EventHub.Models.Dtos.EventDto;
-import com.example.EventHub.Models.Dtos.UserDto;
 import com.example.EventHub.Repositories.EventRepository;
 import com.example.EventHub.Services.ServiceInterfaces.IEventService;
 import jakarta.transaction.Transactional;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,4 +61,25 @@ public class EventServiceImpl implements IEventService {
             throw new IllegalArgumentException("Event with ID " + eventId + " not found");
         }
     }
+
+    @Override
+    public void updateTickets(String eventId, long purchasedTickets) {
+        // Fetch the event by ID
+        Optional<Event> eventOpt = eventRepository.findById(Long.valueOf(eventId));
+        if (eventOpt.isPresent()) {
+            Event event = eventOpt.get();
+
+            // Update the available ticket count
+            long newTicketCount = event.getNoOfTickets() - purchasedTickets;
+            if (newTicketCount < 0) {
+                throw new IllegalArgumentException("Not enough tickets available.");
+            }
+
+            event.setNoOfTickets(newTicketCount);
+            eventRepository.save(event);
+        } else {
+            throw new IllegalArgumentException("Event not found.");
+        }
+    }
+
 }

@@ -95,4 +95,20 @@ public class EventController {
             return ResponseEntity.status(404).body(e.getMessage());
         }
     }
+
+    @PutMapping("/updateTickets/{eventId}")
+    public ResponseEntity<String> updateTickets(
+            @PathVariable String eventId,
+            @RequestParam("purchasedTickets") long purchasedTickets
+    ) {
+        try {
+            eventService.updateTickets(eventId, purchasedTickets);
+            return ResponseEntity.ok("Tickets updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body("Error updating tickets: " + e.getMessage());
+        }
+    }
+
+
+
 }

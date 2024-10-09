@@ -17,6 +17,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long paymentId;
     private long eventId;
-    private int totalTicket;
+    private int ticketCount;
     private double totalPrice;
+    private long cardNumber;
+    private String expiryDate;
+    private String cvv;
 }
