@@ -17,4 +17,5 @@ public class PaymentDto {
     private long cardNumber;
     private String expiryDate;
     private String cvv;
+    private String username;
 }

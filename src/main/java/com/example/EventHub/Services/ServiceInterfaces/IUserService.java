@@ -16,7 +16,7 @@ public interface IUserService {
     UserDto updateUser(String userId, UserDto userDto);
     void deleteUserById(long userId);
     EmailVerifyDto verifyEmail(EmailVerifyDto emailVerifyDTO);
-
+    UserDto getUserByUsername(String username);
 
     ResponseEntity<Object> createAuthenticationToken(AuthRequest authRequest) throws Exception;
 }

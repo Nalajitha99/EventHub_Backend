@@ -115,6 +115,11 @@ public class UserServiceImpl implements IUserService {
         return (UserDto)this.modelMapper.map(user, UserDto.class);
     }
 
+    public UserDto getUserByUsername(String username){
+        User user = this.userRepository.getUserByUsername(username);
+        return (UserDto)this.modelMapper.map(user, UserDto.class);
+    }
+
     public List<UserDto> getAllUsers(){
         List<User> users = userRepository.findAll();
         return users.stream()

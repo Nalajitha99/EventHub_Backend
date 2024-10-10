@@ -29,4 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     void deleteByCreatedDateBeforeAndVerifiedFalse(LocalDateTime oneMinuteAgo);
+
+    @Query(value = "SELECT * FROM USER WHERE username = ?1", nativeQuery = true)
+    User getUserByUsername(String username);
 }

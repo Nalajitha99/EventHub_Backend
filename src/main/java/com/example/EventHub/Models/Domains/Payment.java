@@ -22,4 +22,5 @@ public class Payment {
     private long cardNumber;
     private String expiryDate;
     private String cvv;
+    private String username;
 }
