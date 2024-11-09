@@ -41,6 +41,17 @@ public class EventOrganizerController {
         return eventOrganizerService.getEventOrganizerById(organizerId);
     }
 
+    @PutMapping("/updateStatus/{organizerId}")
+    public ResponseEntity<?> updateEventOrganizerStatus(@PathVariable Long organizerId, @RequestBody EventOrganizerDto eventOrganizerDto) {
+        try {
+            EventOrganizerDto updatedEventOrganizer = eventOrganizerService.updateStatus(organizerId, eventOrganizerDto.getStatus());
+            return ResponseEntity.ok(updatedEventOrganizer);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 
 

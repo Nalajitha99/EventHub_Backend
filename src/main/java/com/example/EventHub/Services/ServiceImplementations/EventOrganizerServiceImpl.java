@@ -39,4 +39,15 @@ public class EventOrganizerServiceImpl implements IEventOrganizerService {
         EventOrganizer eventOrganizer = this.eventOrganizerRepository.getEventOrganizerById(organizerId);
         return (EventOrganizerDto)this.modelMapper.map(eventOrganizer, EventOrganizerDto.class);
     }
+
+    public EventOrganizerDto updateStatus(Long organizerId, String status) {
+        EventOrganizer eventOrganizer = eventOrganizerRepository.findById(organizerId)
+                .orElseThrow(() -> new IllegalArgumentException("Event Organizer not found with id: " + organizerId));
+
+        eventOrganizer.setStatus(status);
+        eventOrganizerRepository.save(eventOrganizer);
+
+        return modelMapper.map(eventOrganizer, EventOrganizerDto.class);
+    }
+
 }

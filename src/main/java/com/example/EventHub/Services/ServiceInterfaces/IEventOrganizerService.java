@@ -8,4 +8,6 @@ public interface IEventOrganizerService {
     EventOrganizerDto saveEventOrganizer(EventOrganizerDto eventOrganizerDto);
     List<EventOrganizerDto> getAllEventOrganizers();
     EventOrganizerDto getEventOrganizerById(String organizerId);
+    EventOrganizerDto updateStatus(Long organizerId, String status);
+
 }
