@@ -54,12 +54,11 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public void deleteEventById(long eventId) {
-        if (eventRepository.existsById(eventId)) {
-            eventRepository.deleteById(eventId);
-        } else {
-            throw new IllegalArgumentException("Event with ID " + eventId + " not found");
+    public void deleteEvent(Long eventId) {
+        if (!eventRepository.existsById(eventId)) {
+            throw new RuntimeException("Event not found with ID: " + eventId);
         }
+        eventRepository.deleteById(eventId);
     }
 
     @Override

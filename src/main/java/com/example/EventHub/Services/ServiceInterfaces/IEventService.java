@@ -9,8 +9,9 @@ public interface IEventService {
     EventDto saveEvent(EventDto eventDto);
     EventDto getEventByID(String eventID);
     List<EventDto> getAllEvents();
-    void deleteEventById(long eventId);
     List<Event> getEventsByVenue(String venue);
+
+    void deleteEvent(Long eventId);
 
     void updateTickets(String eventId, long purchasedTickets);
 

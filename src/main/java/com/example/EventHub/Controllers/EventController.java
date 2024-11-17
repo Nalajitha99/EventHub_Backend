@@ -86,13 +86,13 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    @DeleteMapping("/deleteEvent/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable("id") long eventId) {
+    @DeleteMapping("/deleteEvent/{eventId}")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId) {
         try {
-            eventService.deleteEventById(eventId);
-            return ResponseEntity.ok("Event deleted successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            eventService.deleteEvent(eventId);
+            return ResponseEntity.ok("Event deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Error deleting event: " + e.getMessage());
         }
     }
 
