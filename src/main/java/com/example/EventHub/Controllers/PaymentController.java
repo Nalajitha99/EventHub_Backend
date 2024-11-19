@@ -1,10 +1,13 @@
 package com.example.EventHub.Controllers;
 
 import com.example.EventHub.Models.Dtos.PaymentDto;
+import com.example.EventHub.Models.Dtos.UserDto;
 import com.example.EventHub.Services.ServiceInterfaces.IPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -28,5 +31,12 @@ public class PaymentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/getAllPayments")
+    public ResponseEntity<List<PaymentDto>> getAllUsers(){
+        List<PaymentDto> payments = paymentService.getAllPayments();
+        return ResponseEntity.ok(payments);
+    }
+
 
 }
