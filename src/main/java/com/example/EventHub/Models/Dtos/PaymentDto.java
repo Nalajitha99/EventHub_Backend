@@ -18,4 +18,36 @@ public class PaymentDto {
     private String expiryDate;
     private String cvv;
     private String username;
+
+    public long getPaymentId() {
+        return paymentId;
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public int getTicketCount() {
+        return ticketCount;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public long getCardNumber() {
+        return cardNumber;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 }

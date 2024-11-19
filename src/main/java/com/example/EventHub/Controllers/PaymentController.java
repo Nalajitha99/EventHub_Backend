@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -36,6 +37,11 @@ public class PaymentController {
     public ResponseEntity<List<PaymentDto>> getAllUsers(){
         List<PaymentDto> payments = paymentService.getAllPayments();
         return ResponseEntity.ok(payments);
+    }
+
+    @GetMapping("/ticketsSold")
+    public ResponseEntity<List<Map<String, Object>>> getTicketsSoldByEvent() {
+        return ResponseEntity.ok(paymentService.getTotalTicketsSoldByEvent());
     }
 
 

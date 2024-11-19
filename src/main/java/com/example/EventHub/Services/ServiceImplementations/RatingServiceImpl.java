@@ -1,6 +1,7 @@
 package com.example.EventHub.Services.ServiceImplementations;
 
 
+import com.example.EventHub.Models.Domains.EventOrganizer;
 import com.example.EventHub.Models.Domains.Ratings;
 import com.example.EventHub.Models.Domains.User;
 import com.example.EventHub.Models.Dtos.RatingsDto;
@@ -17,6 +18,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class RatingServiceImpl implements IRatingService {
@@ -28,49 +32,38 @@ public class RatingServiceImpl implements IRatingService {
     private UserRepository userRepository;
 
     @Autowired
-    public RatingServiceImpl(RatingRepository ratingRepository, JavaMailSender javaMailSender) {
+    public RatingServiceImpl(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
-        this.javaMailSender = javaMailSender;
+
     }
 
     @Autowired
     private ModelMapper modelMapper;
 
-    private final JavaMailSender javaMailSender;
 
     public RatingsDto saveRating(RatingsDto ratingsDto){
-
-        ratingRepository.save(modelMapper.map(ratingsDto, Ratings.class));
-
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setMessage("Rating created successfully");
-        String userName = ratingsDto.getUsername();
-        UserDto userDto = new UserDto();
-        userDto = getUserByUsername(userName);
-        UserResponseDto emailResponse=sendEmail(userDto.getEmail());
-        userResponseDto.setEmailResponse(emailResponse.getEmailResponse());
+        Ratings ratings = modelMapper.map(ratingsDto, Ratings.class);
+        ratingRepository.save(ratings);
         return ratingsDto;
+
     }
 
-    public UserResponseDto sendEmail(String email){
-        UserResponseDto userDTO = new UserResponseDto();
-        try{
-            SimpleMailMessage message=new SimpleMailMessage();
-            message.setSubject("Hello User");
-            message.setTo(email);
-            message.setText("Thank You for Rating Us.\n Have a nice day!"+" ");
-            message.setFrom("hubevenlk@gmail.com");
-
-
-            javaMailSender.send(message);
-            userDTO.setEmailResponse("Thanking email send Successfully to" +" "+ email);
-
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("Email not sent"+e);
-        }
-        return userDTO;
+    public List<RatingsDto> getAllRatings(){
+        List<Ratings> ratings = ratingRepository.findAll();
+        return ratings.stream().map(this::convertToDto).collect(Collectors.toList());
     }
+
+    private RatingsDto convertToDto(Ratings ratings) {
+        return new RatingsDto(
+                ratings.getRatingId(),
+                ratings.getComment(),
+                ratings.getStars(),
+                ratings.getUsername()
+        );
+    }
+
+
+
 
     public UserDto getUserByUsername(String username){
         User user = this.userRepository.getUserByUsername(username);

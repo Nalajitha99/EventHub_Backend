@@ -20,4 +20,20 @@ public class Ratings {
     private String comment;
     private String stars;
     private String username;
+
+    public long getRatingId() {
+        return ratingId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getStars() {
+        return stars;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 }
